@@ -1,0 +1,16 @@
+apply plugin: 'application'
+
+mainClassName = 'ilyag9.main.Start'
+
+version =  '0.0.1'
+
+dependencies {
+    compile "log4j:log4j:1.2.17"
+	compile project(":sms") 
+	compile project(":sensors") 
+}
+
+jar {
+    manifest.attributes("Main-Class": mainClassName);
+}
+
