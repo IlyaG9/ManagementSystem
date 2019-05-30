@@ -1,2 +1,2 @@
 rootProject.name = 'ManagementSystem'
-include 'main','sms','sensors'
+include 'db','main','sms','sensors'
