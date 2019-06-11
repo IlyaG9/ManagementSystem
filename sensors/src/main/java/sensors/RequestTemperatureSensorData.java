@@ -7,6 +7,8 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -20,8 +22,9 @@ import org.apache.http.message.BasicHeader;
 import org.apache.http.util.EntityUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -33,7 +36,8 @@ import ilyag9.db.dao.sensor.SensorParamEntity;
 import ilyag9.db.dao.sensor.SensorValueDao;
 import ilyag9.db.dao.sensor.SensorValueEntity;
 
-@EnableScheduling
+@Component
+@PropertySource("classpath:sms.properties")
 public class RequestTemperatureSensorData {
 
 	private static final Logger LOGGER = Logger.getLogger(RequestTemperatureSensorData.class);
@@ -46,7 +50,8 @@ public class RequestTemperatureSensorData {
 
 	private final JsonParser jsonParser = new JsonParser();
 
-	@Scheduled(fixedRate = 5000)
+	@Scheduled(fixedRateString = "${request.sensor.milliseconds}")
+	@Transactional
 	public void request() {
 		LOGGER.info("Start request temperature data");
 
@@ -59,12 +64,12 @@ public class RequestTemperatureSensorData {
 			LOGGER.info("Recieved: " + jsonStr);
 			JsonObject jsonObj = (JsonObject) jsonParser.parse(jsonStr);
 
-			saveParams(sensor.getParams(), jsonObj);
+			saveParams(sensor.getParams(), jsonObj,sensor);
 		}
 
 	}
 
-	private void saveParams(List<SensorParamEntity> params, JsonObject jsonObj) {
+	private void saveParams(List<SensorParamEntity> params, JsonObject jsonObj,SensorEntity sensor) {
 		for (SensorParamEntity param : params) {
 			JsonElement element = jsonObj.get(param.getName());
 			if (element.isJsonPrimitive()) {
@@ -74,11 +79,12 @@ public class RequestTemperatureSensorData {
 					valueEntity.setParam(param);
 					valueEntity.setValue(value);
 					valueEntity.setCreateDate(new Date());
+					valueEntity.setSensor(sensor);
 					sensorValueDao.create(valueEntity);
 					LOGGER.info("Created " + param.getName() + " with value " + value);
 				}
 			}else if(element.isJsonObject()) {
-				saveParams(param.getChilds(),element.getAsJsonObject());
+				saveParams(param.getChilds(),element.getAsJsonObject(),sensor);
 			}
 			
 		}
