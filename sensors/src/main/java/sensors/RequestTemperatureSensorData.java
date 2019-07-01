@@ -35,9 +35,10 @@ import ilyag9.db.dao.sensor.SensorEntity;
 import ilyag9.db.dao.sensor.SensorParamEntity;
 import ilyag9.db.dao.sensor.SensorValueDao;
 import ilyag9.db.dao.sensor.SensorValueEntity;
+import org.springframework.util.StringUtils;
 
 @Component
-@PropertySource("classpath:sms.properties")
+@PropertySource("classpath:sensors.properties")
 public class RequestTemperatureSensorData {
 
 	private static final Logger LOGGER = Logger.getLogger(RequestTemperatureSensorData.class);
@@ -62,14 +63,19 @@ public class RequestTemperatureSensorData {
 			LOGGER.info("Start process sensor with id " + sensor.getId());
 			String jsonStr = getJson(sensor.getUrl());
 			LOGGER.info("Recieved: " + jsonStr);
-			JsonObject jsonObj = (JsonObject) jsonParser.parse(jsonStr);
+			if (StringUtils.isEmpty(jsonStr) == false) {
+				JsonObject jsonObj = (JsonObject) jsonParser.parse(jsonStr);
 
-			saveParams(sensor.getParams(), jsonObj,sensor);
+				saveParams(sensor.getParams(), jsonObj, sensor);
+			}
 		}
 
 	}
 
 	private void saveParams(List<SensorParamEntity> params, JsonObject jsonObj,SensorEntity sensor) {
+		if(params==null){
+			return;
+		}
 		for (SensorParamEntity param : params) {
 			JsonElement element = jsonObj.get(param.getName());
 			if (element.isJsonPrimitive()) {
@@ -149,7 +155,7 @@ public class RequestTemperatureSensorData {
 
 	public static void main(String[] a) {
 		RequestTemperatureSensorData obj = new RequestTemperatureSensorData();
-		String json = obj.getJson("http://192.168.0.196/");
+		String json = obj.getJson("http://ilyag9.asuscomm.com:196/");
 		LOGGER.info(json);
 
 	}

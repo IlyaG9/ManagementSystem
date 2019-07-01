@@ -16,11 +16,10 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
 
-import ilyag9.main.config.AppInitializer;
 
 @EnableScheduling
 @SpringBootApplication
-//@Configuration
+@Configuration
 @ComponentScan(basePackages = {"ilyag9.db","sensors"})
 public class Start implements WebApplicationInitializer {
 
