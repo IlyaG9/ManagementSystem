@@ -6,9 +6,10 @@ import javax.servlet.ServletRegistration;
 
 import org.apache.log4j.Logger;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.ContextLoaderListener;
@@ -18,9 +19,10 @@ import org.springframework.web.servlet.DispatcherServlet;
 
 
 @EnableScheduling
+@EnableAutoConfiguration(exclude=HibernateJpaAutoConfiguration.class)
 @SpringBootApplication
-@Configuration
-@ComponentScan(basePackages = {"ilyag9.db","sensors"})
+//@Configuration
+@ComponentScan(basePackages = {"ilyag9.db","sensors","ilyag9.main.rest.controller"})
 public class Start implements WebApplicationInitializer {
 
 

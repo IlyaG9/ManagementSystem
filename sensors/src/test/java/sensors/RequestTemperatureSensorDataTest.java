@@ -40,7 +40,6 @@ public class RequestTemperatureSensorDataTest {
 	public void requestTest() {
 
 		final SensorEntity entity = new SensorEntity();
-		entity.setId(1l);
 		entity.setName("Test");
 		entity.setUrl("http://192.168.0.196/");
 		

@@ -72,8 +72,19 @@ public class RequestTemperatureSensorData {
 
 	}
 
-	private void saveParams(List<SensorParamEntity> params, JsonObject jsonObj,SensorEntity sensor) {
-		if(params==null){
+	private void saveParams(List<SensorParamEntity> params, JsonObject jsonObj, SensorEntity sensor) {
+		if (params == null || params.isEmpty()) {
+			if (jsonObj.has(sensor.getName())) {
+				String value = jsonObj.get(sensor.getName()).getAsString();
+				if (value != null) {
+					SensorValueEntity valueEntity = new SensorValueEntity();
+					valueEntity.setValue(value);
+					valueEntity.setCreateDate(new Date());
+					valueEntity.setSensor(sensor);
+					sensorValueDao.create(valueEntity);
+					LOGGER.info("Created " + sensor.getName() + " with value " + value);
+				}
+			}
 			return;
 		}
 		for (SensorParamEntity param : params) {
@@ -89,10 +100,10 @@ public class RequestTemperatureSensorData {
 					sensorValueDao.create(valueEntity);
 					LOGGER.info("Created " + param.getName() + " with value " + value);
 				}
-			}else if(element.isJsonObject()) {
-				saveParams(param.getChilds(),element.getAsJsonObject(),sensor);
+			} else if (element.isJsonObject()) {
+				saveParams(param.getChilds(), element.getAsJsonObject(), sensor);
 			}
-			
+
 		}
 	}
 
