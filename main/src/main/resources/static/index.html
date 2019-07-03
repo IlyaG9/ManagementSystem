@@ -11,8 +11,12 @@
  <body> 
  </body>
  <script>
- var data = { "name" : "bedroom",
- "url":"http://192.168.0.196/" };
+ var data = { "name" : "street",
+ "url":"http://ilyag9.asuscomm.com:196/",
+  "paramList": [
+  {"name":"humidity"},
+  {"name":"temperature"}
+  ]};
 $.ajax({
     type: "POST",
     url: "http://localhost:8083/manage/sensor/save",

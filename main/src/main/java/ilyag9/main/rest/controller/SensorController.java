@@ -11,12 +11,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import ilyag9.db.dao.sensor.SensorDao;
 import ilyag9.db.dao.sensor.SensorEntity;
@@ -26,9 +21,11 @@ import ilyag9.main.rest.dto.SensorParamDto;
 
 @RestController
 @RequestMapping("/sensor")
+@CrossOrigin(maxAge = 3600)
+@Transactional
 public class SensorController {
 
-	
+
 	private static final Logger LOGGER = Logger.getLogger(SensorController.class);
 	@Autowired
 	private SensorDao sensorDao;
@@ -44,7 +41,6 @@ public class SensorController {
 	}
 
 	@PostMapping("save")
-	@Transactional
 	public void save(@RequestBody SensorDto sensor) {
 
 		Assert.notNull(sensor, "Sensor not set");
@@ -55,9 +51,11 @@ public class SensorController {
 		entity.setCreateDate(new Date());
 		BeanUtils.copyProperties(sensor, entity);
 
+        Optional.ofNullable(sensor.getParamList()).ifPresent(params -> entity.setParams(params.parallelStream().map(this::convert).collect(Collectors.toList())));
+
 		sensorDao.create(entity);
 
-		
+
 		LOGGER.info("Created new sensor "+sensor.getName());
 	}
 
@@ -66,9 +64,8 @@ public class SensorController {
 
 		BeanUtils.copyProperties(entity, sensor);
 
-		if (entity.getParams() != null) {
-			sensor.setParamList(entity.getParams().parallelStream().map(this::convert).collect(Collectors.toList()));
-		}
+        Optional.ofNullable(entity.getParams()).ifPresent(params ->
+                sensor.setParamList(params.parallelStream().map(this::convert).collect(Collectors.toList())));
 
 		return sensor;
 	}
@@ -77,5 +74,11 @@ public class SensorController {
 		final SensorParamDto paramDto = new SensorParamDto();
 		BeanUtils.copyProperties(paramEntity, paramDto);
 		return paramDto;
+	}
+
+	private SensorParamEntity  convert(SensorParamDto dto) {
+		final SensorParamEntity paramEntity = new SensorParamEntity();
+		BeanUtils.copyProperties(dto, paramEntity);
+		return paramEntity;
 	}
 }
