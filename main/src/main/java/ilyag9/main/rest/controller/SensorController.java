@@ -21,7 +21,7 @@ import ilyag9.main.rest.dto.SensorParamDto;
 
 @RestController
 @RequestMapping("/sensor")
-@CrossOrigin(maxAge = 3600)
+@CrossOrigin(origins = "*",maxAge = 3600)
 @Transactional
 public class SensorController {
 

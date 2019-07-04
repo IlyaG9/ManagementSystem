@@ -77,34 +77,40 @@ public class RequestTemperatureSensorData {
 			if (jsonObj.has(sensor.getName())) {
 				String value = jsonObj.get(sensor.getName()).getAsString();
 				if (value != null) {
-					SensorValueEntity valueEntity = new SensorValueEntity();
-					valueEntity.setValue(value);
-					valueEntity.setCreateDate(new Date());
-					valueEntity.setSensor(sensor);
-					sensorValueDao.create(valueEntity);
-					LOGGER.info("Created " + sensor.getName() + " with value " + value);
+					createValue(sensor, null, value);
 				}
 			}
 			return;
 		}
+		JsonElement sensorElement = jsonObj.get(sensor.getName());
+		if (sensorElement == null) {
+			return;
+		}
+		JsonObject asJsonObject = sensorElement.getAsJsonObject();
 		for (SensorParamEntity param : params) {
-			JsonElement element = jsonObj.get(param.getName());
-			if (element.isJsonPrimitive()) {
+			JsonElement element = asJsonObject.get(param.getName());
+			if (element != null && element.isJsonPrimitive()) {
 				String value = element.getAsString();
 				if (value != null) {
-					SensorValueEntity valueEntity = new SensorValueEntity();
-					valueEntity.setParam(param);
-					valueEntity.setValue(value);
-					valueEntity.setCreateDate(new Date());
-					valueEntity.setSensor(sensor);
-					sensorValueDao.create(valueEntity);
-					LOGGER.info("Created " + param.getName() + " with value " + value);
+					createValue(sensor, param, value);
 				}
 			} else if (element.isJsonObject()) {
 				saveParams(param.getChilds(), element.getAsJsonObject(), sensor);
 			}
 
 		}
+	}
+
+	private void createValue(SensorEntity sensor, SensorParamEntity param, String value) {
+		SensorValueEntity valueEntity = new SensorValueEntity();
+		valueEntity.setValue(value);
+		valueEntity.setCreateDate(new Date());
+		valueEntity.setSensor(sensor);
+		if (param != null) {
+			valueEntity.setParam(param);
+		}
+		sensorValueDao.create(valueEntity);
+		LOGGER.info("Created " + sensor.getName() + " with value " + value);
 	}
 
 	public String getJson(String url) {
