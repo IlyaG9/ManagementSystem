@@ -6,7 +6,7 @@ public class SensorParamDto {
 
 	private Long id;
 	private String name;
-	private List<SensorParamDto> childs;
+	private List<SensorParamDto> childsParams;
 	public Long getId() {
 		return id;
 	}
@@ -19,13 +19,11 @@ public class SensorParamDto {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public List<SensorParamDto> getChilds() {
-		return childs;
+	public List<SensorParamDto> getChildsParams() {
+		return childsParams;
 	}
-	public void setChilds(List<SensorParamDto> childs) {
-		this.childs = childs;
+	public void setChildsParams(List<SensorParamDto> childsParams) {
+		this.childsParams = childsParams;
 	}
-	
-	
 
 }

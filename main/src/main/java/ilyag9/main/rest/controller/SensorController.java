@@ -1,5 +1,6 @@
 package ilyag9.main.rest.controller;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -36,8 +37,13 @@ public class SensorController {
 	}
 
 	@GetMapping("/{id}")
-	public SensorDto get(@RequestParam(value = "id", required = true) Long id) {
+	public SensorDto get(@PathVariable(value = "id", required = true) Long id) {
 		return Optional.ofNullable(sensorDao.get(id)).map(this::convert).orElse(null);
+	}
+	
+	@DeleteMapping("/{id}")
+	public void delete(@PathVariable(value = "id", required = true) Long id) {
+		sensorDao.delete(id);
 	}
 
 	@PostMapping("save")
@@ -73,6 +79,15 @@ public class SensorController {
 	private SensorParamDto convert(SensorParamEntity paramEntity) {
 		final SensorParamDto paramDto = new SensorParamDto();
 		BeanUtils.copyProperties(paramEntity, paramDto);
+
+		Optional.ofNullable(paramEntity.getChilds()).ifPresent(params -> {
+			final List<SensorParamDto> childs = new ArrayList<>();
+
+			params.forEach(p -> childs.add(convert(p)));
+
+			paramDto.setChildsParams(childs);
+		});
+
 		return paramDto;
 	}
 
