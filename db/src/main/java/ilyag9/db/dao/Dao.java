@@ -10,4 +10,6 @@ public interface Dao<T> {
     T get(Serializable id);
 
     Collection<T> findAll();
+    
+    void delete(Serializable idS);
 }

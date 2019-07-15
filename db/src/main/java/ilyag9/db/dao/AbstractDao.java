@@ -37,5 +37,12 @@ public abstract class AbstractDao<T> implements Dao<T> {
         Criteria crit = getSession().createCriteria(clazz);
         return crit.list();
     }
+    
+    public void delete(Serializable id) {
+    	T obj = get(id);
+    	if(obj!=null) {
+    		getSession().delete(obj);
+    	}
+    }
 
 }
