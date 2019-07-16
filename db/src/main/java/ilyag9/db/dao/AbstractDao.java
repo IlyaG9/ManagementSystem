@@ -28,6 +28,12 @@ public abstract class AbstractDao<T> implements Dao<T> {
         }
     }
 
+    public void update(T object) {
+        if (object != null) {
+            getSession().saveOrUpdate(object);
+        }
+    }
+
     public T get(Serializable id) {
         return (T) getSession().get(clazz, id);
     }

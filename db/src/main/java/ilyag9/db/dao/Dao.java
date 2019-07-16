@@ -7,6 +7,8 @@ public interface Dao<T> {
 
     void create(T object);
 
+    void update(T object);
+
     T get(Serializable id);
 
     Collection<T> findAll();

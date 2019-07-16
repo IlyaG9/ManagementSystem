@@ -4,7 +4,11 @@ import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
-@Entity
+
+@NamedQueries({
+        @NamedQuery(name = "User.findByloginAndPassword", query = "select u from user u where u.login=:userName and u.password=:password"),
+        @NamedQuery(name = "User.findByToken", query = "select u from user u where u.token=:token")})
+@Entity(name = "user")
 @Table(name = "app_user")
 public class UserEntity {
 
@@ -21,6 +25,9 @@ public class UserEntity {
 
     @Column(name = "PASSWORD",nullable = false)
     private String password;
+
+    @Column(name = "TOKEN")
+    private String token;
 
     @Temporal(TemporalType.DATE)
     @Column(name = "LAST_LOGIN")
@@ -49,6 +56,14 @@ public class UserEntity {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 
     public String getLogin() {
