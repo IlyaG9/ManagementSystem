@@ -31,7 +31,7 @@ public class SensorController {
 	@Autowired
 	private SensorDao sensorDao;
 
-	@GetMapping("/list")
+	@GetMapping(value="/list",produces = "application/json")
 	public List<SensorDto> list() {
 		return sensorDao.findAll().parallelStream().map(this::convert).collect(Collectors.toList());
 	}
