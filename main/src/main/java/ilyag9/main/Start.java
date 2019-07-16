@@ -21,7 +21,6 @@ import org.springframework.web.servlet.DispatcherServlet;
 @EnableScheduling
 @EnableAutoConfiguration(exclude=HibernateJpaAutoConfiguration.class)
 @SpringBootApplication
-//@Configuration
 @ComponentScan(basePackages = {"ilyag9.db","sensors","ilyag9.main.rest.controller"})
 public class Start implements WebApplicationInitializer {
 
