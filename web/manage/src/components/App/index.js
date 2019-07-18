@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.css'
-import Login from '../Login'
+import Sidebar from '../Sidebar'
 import AuthService from '../../service/AuthService';
 
 
@@ -21,18 +21,15 @@ class App extends Component {
     }
 
     render() {
-        const logoutBtn = this.Auth.loggedIn() ? <button onClick={this.handleLogout.bind(this)}>Logout</button>:'';
+        const sideBar = this.Auth.loggedIn() ?<Sidebar/>:'';
         return (
             <div className={'container'}>
-                {logoutBtn}
+                {sideBar}
             </div>
         );
     }
 
-   handleLogout(){
-        this.Auth.logout();
-       this.props.history.replace('/login')
-   }
+
 
 //<Login/>
 }
