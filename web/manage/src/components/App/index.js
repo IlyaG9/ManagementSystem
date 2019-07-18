@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.css'
 import Sidebar from '../Sidebar'
+import UserList from '../UserList'
 import AuthService from '../../service/AuthService';
 
 
@@ -22,9 +23,10 @@ class App extends Component {
 
     render() {
         const sideBar = this.Auth.loggedIn() ?<Sidebar/>:'';
+        const userList = this.Auth.loggedIn() ?<UserList/>:'';
         return (
             <div className={'container'}>
-                {sideBar}
+                {sideBar} {userList}
             </div>
         );
     }

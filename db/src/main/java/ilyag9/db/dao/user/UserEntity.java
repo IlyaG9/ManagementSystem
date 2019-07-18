@@ -29,11 +29,11 @@ public class UserEntity {
     @Column(name = "TOKEN")
     private String token;
 
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "LAST_LOGIN")
     private Date lastLogin;
 
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "CREATE_DATE",nullable = false)
     private Date createDate;
 

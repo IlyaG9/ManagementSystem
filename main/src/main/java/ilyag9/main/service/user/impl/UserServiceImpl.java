@@ -22,6 +22,7 @@ import ilyag9.main.service.user.UserService;
 
 @Service("userService")
 @PropertySource("classpath:application.properties")
+@Transactional
 public class UserServiceImpl implements UserService {
 
     @Value("${token.live.time}")
@@ -30,11 +31,10 @@ public class UserServiceImpl implements UserService {
     private UserDao userDao;
 
     @Override
-    @Transactional
     public String login(String userName, String password) {
         return Optional.ofNullable(userDao.get(userName,password)).filter(Objects::nonNull).map(this::checkToken).map(UserEntity::getToken).orElse(null);
     }
-    @Transactional
+
     private UserEntity checkToken(final UserEntity entity){
         if(entity.getLastLogin()==null||(new Date().getTime()-entity.getLastLogin().getTime())>tokenLiveTime){
             entity.setToken(UUID.randomUUID().toString());
@@ -43,14 +43,14 @@ public class UserServiceImpl implements UserService {
         }
         return entity;
     }
-	@Override
-	@Transactional
+	
+    @Override
 	public Optional<User> getByToken(String token) {
 		return Optional.ofNullable(userDao.findByToken(token)).filter(Objects::nonNull).map(this::convert);
 	}
 	
 	private User convert(UserEntity entity) {
-		boolean notExpired = (new Date().getTime() - entity.getLastLogin().getTime()) <= tokenLiveTime;
+		boolean notExpired = !((new Date().getTime()-entity.getLastLogin().getTime())>tokenLiveTime);
 		final User user = new User(entity.getLogin(), entity.getPassword(), notExpired, notExpired, notExpired,
 				notExpired, AuthorityUtils.createAuthorityList(entity.getRoleList().stream()
 						.map(UserRoleEntity::getIdentifier).collect(Collectors.toList()).toArray(new String[0])));

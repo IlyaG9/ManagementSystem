@@ -11,7 +11,7 @@ export default class Sidebar extends Component {
 
     render() {
         return (
-            <div className="page-wrapper chiller-theme toggled">
+            <div className="page-wrapper chiller-theme toggled position-absolute">
                 <a id="show-sidebar" className="btn btn-sm btn-dark" href="#">
                     <i className="fas fa-bars"></i>
                 </a>
@@ -42,12 +42,12 @@ export default class Sidebar extends Component {
                         <div className="sidebar-menu">
                             <ul>
                                 <li className="header-menu">
-                                    <span>General</span>
+                                    <span>Настройки</span>
                                 </li>
                                 <li className="sidebar-dropdown">
-                                    <a href="#">
+                                    <a href="/users">
                                         <i className="fa fa-tachometer-alt"></i>
-                                        <span>Dashboard</span>
+                                        <span>Пользователи</span>
                                         <span className="badge badge-pill badge-warning">New</span>
                                     </a>
                                     <div className="sidebar-submenu">

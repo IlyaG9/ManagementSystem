@@ -30,7 +30,8 @@ import java.util.Arrays;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-	private static final RequestMatcher ADMIN_URLS = new OrRequestMatcher(new AntPathRequestMatcher("/sensor/**"));
+	private static final RequestMatcher ADMIN_URLS = new OrRequestMatcher(new AntPathRequestMatcher("/sensor/**"),
+			new AntPathRequestMatcher("/user/**"));
 
 	AuthenticationProvider provider;
 
@@ -52,11 +53,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.cors().and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().exceptionHandling().and()
-				.authenticationProvider(provider)
+		http.cors().and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+				.exceptionHandling().and().authenticationProvider(provider)
 				.addFilterBefore(authenticationFilter(), AnonymousAuthenticationFilter.class).authorizeRequests()
-				.requestMatchers(ADMIN_URLS).authenticated()
-				.and().csrf().disable().formLogin().disable().httpBasic()
+				.requestMatchers(ADMIN_URLS).authenticated().and().csrf().disable().formLogin().disable().httpBasic()
 				.disable().logout().permitAll();
 	}
 
@@ -77,21 +77,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		return new WebMvcConfigurer() {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
-				registry.addMapping("/**")
-						.allowedOrigins("*")
-						.allowedMethods("GET", "PUT", "POST", "PATCH", "DELETE", "OPTIONS");
+				registry.addMapping("/**").allowedOrigins("*").allowedMethods("GET", "PUT", "POST", "PATCH", "DELETE",
+						"OPTIONS");
 			}
 		};
 	}
-
-//	@Bean
-//	CorsConfigurationSource corsConfigurationSource() {
-//		CorsConfiguration configuration = new CorsConfiguration();
-//		configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000/login"));
-//		configuration.setAllowedMethods(Arrays.asList("GET","POST"));
-//		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-//		source.registerCorsConfiguration("/**", configuration);
-//		return source;
-//	}
 
 }
