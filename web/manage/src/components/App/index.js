@@ -3,15 +3,16 @@ import './App.css';
 import 'bootstrap/dist/css/bootstrap.css'
 import Login from '../Login'
 
-class App extends Component{
+class Index extends Component{
 
   render() {
     return (
         <div className={'container'}>
-          <Login/>
+
         </div>
     );
   }
+//<Login/>
 }
 
-export default App;
+export default Index;

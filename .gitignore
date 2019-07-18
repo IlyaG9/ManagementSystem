@@ -40,3 +40,7 @@ build
 /tempffplugin/manifest.json
 /tempffplugin/popup/popup.html
 /web/manage/.idea
+/main/out/production/classes/ilyag9/main/service/user/impl/*.class
+/main/out/production/classes/ilyag9/main/service/user/*.class
+/main/out/production/classes/ilyag9/main/rest/controller/*.class
+/main/out/production/classes/ilyag9/main/security/*.class

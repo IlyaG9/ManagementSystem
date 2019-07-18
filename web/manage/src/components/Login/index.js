@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
 import Input from '../Input';
 import './style.css'
+import AuthService from '../../service/AuthService';
 
 class Login extends Component {
 
@@ -11,7 +12,7 @@ class Login extends Component {
             username: '',
             password: ''
         }
-
+        this.Auth = new AuthService();
         this.onLoginChange = this.onLoginChange.bind(this);
         this.onPasswordChange = this.onPasswordChange.bind(this);
     }
@@ -48,6 +49,13 @@ class Login extends Component {
 
     enter = (e) => {
         e.preventDefault();
+        this.Auth.login(this.state.username,this.state.password)
+            .then(res =>{
+                this.props.history.replace('/');
+            })
+            .catch(err =>{
+                alert(err);
+            })
         console.log("login:" + this.state.username + "/password:" + this.state.password);
 
     }
