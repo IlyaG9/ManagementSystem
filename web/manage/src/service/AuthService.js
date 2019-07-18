@@ -22,9 +22,14 @@ export default class AuthService {
             method: 'POST',
             headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'},
             body: "username="+username+"&password="+password
-        }).then(res => {
-            this.setToken(res.token)
-            return Promise.resolve(res);
+        }).then(response=>response.text()).then(token => {
+
+            if('no token found'==token){
+                var error = new Error(token)
+                throw error
+            }
+            this.setToken(token)
+            return Promise.resolve(token);
         })
     }
 
