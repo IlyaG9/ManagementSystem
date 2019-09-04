@@ -4,7 +4,8 @@ export default class AuthService {
         this.serverUrl = serverUrl || 'http://localhost:8083/manage';
 
         this.fetch = this.fetch.bind(this);
-        this.login = this.login.bind(this)
+        this.login = this.login.bind(this);
+        
     }
 
     setToken(token) {
@@ -46,7 +47,7 @@ export default class AuthService {
             }
             this.setToken(token)
             return Promise.resolve(token);
-        }).then(() => this.fetch(`${this.serverUrl}/get-user-by-token?token=`+ this.getToken(), {
+        }).then(() => this.fetch(`${this.serverUrl}/user/get-user-by-token?token=`+ this.getToken(), {
 
             method: 'GET'
         }).then(responseJSON => {
@@ -70,6 +71,7 @@ export default class AuthService {
         if (response.status >= 200 && response.status < 300) {
             return response
         } else {
+            localStorage.removeItem('token');
             var error = new Error(response.statusText)
             error.response = response
             throw error

@@ -1,15 +1,15 @@
 /* eslint-disable eqeqeq */
 /* eslint-disable jsx-a11y/img-redundant-alt */
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom'
 import './style.css'
 import AuthService from '../../service/AuthService';
 
 export default class Sidebar extends Component {
 
-    constructor(props){
+    constructor(props) {
         super(props);
-        this.Auth=new AuthService();
+        this.Auth = new AuthService();
     }
 
     render() {
@@ -42,11 +42,12 @@ export default class Sidebar extends Component {
                                     <span>General</span>
                                 </li>
                                 <li className="sidebar-dropdown">
-                                    <a href="#">
-                                        <i className="fa fa-tachometer-alt"></i>
-                                        <span>Dashboard</span>
-                                        <span className="badge badge-pill badge-warning">New</span>
-                                    </a>
+                                    <NavLink to="/users" >     
+                                      <i className="fa fa-tachometer-alt"></i>
+                                        <span>Пользователи</span>
+                                        <span className="badge badge-pill badge-warning">New</span> 
+                                    </NavLink >
+
                                     <div className="sidebar-submenu">
                                         <ul>
                                             <li>
@@ -176,7 +177,7 @@ export default class Sidebar extends Component {
                     </div>
 
                     <div className="sidebar-footer">
-                      <NavLink    to="/login"  onClick={this.handleLogout.bind(this)}>Выйти</NavLink >
+                        <NavLink to="/login" onClick={this.handleLogout.bind(this)}>Выйти</NavLink >
                     </div>
                 </nav>
             </div>
@@ -184,7 +185,7 @@ export default class Sidebar extends Component {
     }
 
     getUserName() {
-       var userName= this.Auth.getUserName();
+        var userName = this.Auth.getUserName();
         console.log(userName);
         return userName;
     }
@@ -198,7 +199,7 @@ export default class Sidebar extends Component {
         return userRoles;
     }
 
-    handleLogout(){
+    handleLogout() {
         this.Auth.logout();
 
     }

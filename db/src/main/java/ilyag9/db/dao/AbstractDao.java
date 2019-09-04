@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.io.Serializable;
 import java.util.Collection;
 
+import javax.transaction.Transactional;
+
 public abstract class AbstractDao<T> implements Dao<T> {
 
     @Autowired
@@ -38,6 +40,7 @@ public abstract class AbstractDao<T> implements Dao<T> {
         return (T) getSession().get(clazz, id);
     }
 
+    @Transactional
     public Collection<T> findAll(){
 
         Criteria crit = getSession().createCriteria(clazz);
