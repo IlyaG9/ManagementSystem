@@ -30,7 +30,8 @@ import java.util.Arrays;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-	private static final RequestMatcher ADMIN_URLS = new OrRequestMatcher(new AntPathRequestMatcher("/sensor/**"));
+	private static final RequestMatcher ADMIN_URLS = new OrRequestMatcher(new AntPathRequestMatcher("/sensor/**"),
+			new AntPathRequestMatcher("/get-user-by-token"));
 
 	AuthenticationProvider provider;
 

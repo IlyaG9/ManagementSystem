@@ -1,4 +1,7 @@
+/* eslint-disable eqeqeq */
+/* eslint-disable jsx-a11y/img-redundant-alt */
 import React, {Component} from 'react';
+import { NavLink } from 'react-router-dom'
 import './style.css'
 import AuthService from '../../service/AuthService';
 
@@ -12,9 +15,6 @@ export default class Sidebar extends Component {
     render() {
         return (
             <div className="page-wrapper chiller-theme toggled">
-                <a id="show-sidebar" className="btn btn-sm btn-dark" href="#">
-                    <i className="fas fa-bars"></i>
-                </a>
                 <nav id="sidebar" className="sidebar-wrapper">
                     <div className="sidebar-content">
                         <div className="sidebar-brand">
@@ -26,15 +26,12 @@ export default class Sidebar extends Component {
                         <div className="sidebar-header">
                             <div className="user-pic">
                                 <img className="img-responsive img-rounded"
-                                     src="https://raw.githubusercontent.com/azouaoui-med/pro-sidebar-template/gh-pages/src/img/user.jpg"
-                                     alt="User picture"/>
+                                    src="https://raw.githubusercontent.com/azouaoui-med/pro-sidebar-template/gh-pages/src/img/user.jpg"
+                                    alt="User picture" />
                             </div>
                             <div className="user-info">
-          <span className="user-name">Jhon
-          </span>
-                                <span className="user-role">Administrator</span>
-
-
+                                <span className="user-name">{this.getUserName()}</span>
+                                <span className="user-role">{this.getUserRoles()}</span>
                             </div>
                         </div>
 
@@ -179,13 +176,27 @@ export default class Sidebar extends Component {
                     </div>
 
                     <div className="sidebar-footer">
-                      <button   className="btn btn-default"  onClick={this.handleLogout.bind(this)}>Выйти</button>
+                      <NavLink    to="/login"  onClick={this.handleLogout.bind(this)}>Выйти</NavLink >
                     </div>
                 </nav>
             </div>
         );
     }
 
+    getUserName() {
+       var userName= this.Auth.getUserName();
+        console.log(userName);
+        return userName;
+    }
+
+    getUserRoles() {
+        var userRoles = "Нет ролей";
+        var roles = this.Auth.getUserRoles();
+        if (roles) {
+            userRoles = roles;
+        }
+        return userRoles;
+    }
 
     handleLogout(){
         this.Auth.logout();

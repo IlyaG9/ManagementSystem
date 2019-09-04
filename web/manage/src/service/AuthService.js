@@ -12,29 +12,54 @@ export default class AuthService {
     }
 
     getToken() {
-        return localStorage.getItem('token')
+        return localStorage.getItem('token');
     }
+
+    getUserName() {
+        return localStorage.getItem('userName');
+    }
+
+   setUserName(userName) {
+        localStorage.setItem('userName', userName);
+    }
+    getUserRoles() {
+        return localStorage.getItem('userRoles');
+    }
+
+    setUserRoles(roles){
+        localStorage.setItem('userRoles', roles);
+    }
+   
 
     login(username, password) {
 
         return fetch(`${this.serverUrl}/token`, {
 
             method: 'POST',
-            headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'},
-            body: "username="+username+"&password="+password
-        }).then(response=>response.text()).then(token => {
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
+            body: "username=" + username + "&password=" + password
+        }).then(response => response.text()).then(token => {
 
-            if('no token found'==token){
+            if (!token || 'no token found' === token) {
                 var error = new Error(token)
                 throw error
             }
             this.setToken(token)
             return Promise.resolve(token);
-        })
+        }).then(() => this.fetch(`${this.serverUrl}/get-user-by-token?token=`+ this.getToken(), {
+
+            method: 'GET'
+        }).then(responseJSON => {
+            console.log(responseJSON)
+            this.setUserName(responseJSON.userName);
+            this.setUserRoles(responseJSON.userRoles);
+            return Promise.resolve(this.getToken());
+        }));
     }
 
     logout() {
         localStorage.removeItem('token');
+
     }
 
     loggedIn() {
