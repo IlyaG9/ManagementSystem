@@ -11,28 +11,33 @@ export default class UserList extends Component {
             users: []
 
         }
-        this.Auth.fetch(this.Auth.serverUrl + "/user/list").then(json=>{
-            console.log("users:"+json);
-            this.setState({
-                    users: json
-                }
-            );
-        });
+   
     }
 
     componentWillMount() {
 
-
+     this.Auth.fetch(this.Auth.serverUrl + "/user/list").then(json=>{
+     
+            this.setState({
+                    users:this.state.users.concat(json)
+                }
+            );
+        });
 
     }
 
 
     render() {
-        const ul=this.state.users.map(u=><div className="col-md-3 text-center" key={u.id}>{u.name}</div>);
+        const rows=[];
+        for (let index = 0; index < this.state.users.length; index++) {
+            const user = this.state.users[index];
+            rows.push(<div key={user.userName} className="col-md-3 text-center" >{user.userName}</div>);
+            
+        }
         return (
 
-            <div className="margin-from-left">
-                {ul}
+            <div key="userList" className="margin-from-left">
+                {rows}
             </div>
         );
     }

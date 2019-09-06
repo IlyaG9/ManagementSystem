@@ -23,7 +23,7 @@ export default class Sidebar extends Component {
                                 <i className="fas fa-times"></i>
                             </div>
                         </div>
-                        <div className="sidebar-header">
+                        <div className="sidebar-header" onClick={this.toggle.bind(this)}>
                             <div className="user-pic">
                                 <img className="img-responsive img-rounded"
                                     src="https://raw.githubusercontent.com/azouaoui-med/pro-sidebar-template/gh-pages/src/img/user.jpg"
@@ -201,6 +201,16 @@ export default class Sidebar extends Component {
 
     handleLogout() {
         this.Auth.logout();
+
+    }
+
+    toggle(){
+        var list = document.getElementsByClassName('page-wrapper')[0].classList;
+        if (list.contains("toggled")) {
+            document.getElementsByClassName('page-wrapper')[0].classList.remove("toggled");
+        } else {
+            document.getElementsByClassName('page-wrapper')[0].classList.add("toggled");
+        }
 
     }
 

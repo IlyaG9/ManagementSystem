@@ -25,15 +25,13 @@ class App extends Component {
         const sideBar = this.Auth.loggedIn() ?<Sidebar/>:'';
         const userList = this.Auth.loggedIn() ?<UserList/>:'';
         return (
-            <div className={'container'}>
-                {sideBar} {userList}
+            <div>
+                {sideBar}
             </div>
         );
     }
 
 
-
-//<Login/>
 }
 
 export default App;
